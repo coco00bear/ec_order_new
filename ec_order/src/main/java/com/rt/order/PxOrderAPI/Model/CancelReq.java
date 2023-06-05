@@ -3,8 +3,18 @@ package com.rt.order.PxOrderAPI.Model;
 public class CancelReq {
     private Integer order_uid;//RT訂單編號
     private Integer store_no;//店號
-    private Integer status;//狀態
+//    private Integer status;//狀態
     private CancelData data;//訂單資訊
+
+    @Override
+    public String toString() {
+        return "CancelReq{" +
+                "order_uid=" + order_uid +
+                ", store_no=" + store_no +
+                ", data=" + data +
+                '}';
+    }
+
     public Integer getOrder_uid() {
         return order_uid;
     }
@@ -17,12 +27,12 @@ public class CancelReq {
     public void setStore_no(Integer store_no) {
         this.store_no = store_no;
     }
-    public Integer getStatus() {
-        return status;
-    }
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+//    public Integer getStatus() {
+//        return status;
+//    }
+//    public void setStatus(Integer status) {
+//        this.status = status;
+//    }
     public CancelData getData() {
         return data;
     }

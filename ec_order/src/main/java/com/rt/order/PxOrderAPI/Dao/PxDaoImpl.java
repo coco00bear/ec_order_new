@@ -8,6 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.rt.order.PxOrderAPI.Model.CancelReq;
@@ -38,9 +39,9 @@ public class PxDaoImpl implements PxDao {
         String sql = "SELECT status FROM DELIVERY_ORDERS WHERE order_no =:order_no ";
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("order_no", cancelReq.getOrder_uid());
-        map.put("status", cancelReq.getStatus());
+//        map.put("status", cancelReq.getStatus());
         Integer count = storeNamedParameterJdbcTemplate.get(String.format("%2d", cancelReq.getStore_no())).queryForObject(sql, map, Integer.class);
-        clogger.debug(map.toString());
+//        clogger.debug(map.toString());
         clogger.debug("xxx check_status" + " == orderNo ==" + cancelReq.getOrder_uid() + " == count == " + count);
         try {
             return count;
@@ -52,9 +53,11 @@ public class PxDaoImpl implements PxDao {
 
 
     @Override
+    @Transactional
     public Integer update_px_status(CancelReq cancelReq) {
-        clogger.debug("更新貨態為取消訂單 update_px_status");//更新取消訂單貨態
+        clogger.debug("更新貨態為取消訂單 update_px_status");//更新取消訂單貨態 1.新增訂單退款單 2.新增退貨主檔 3.更新訂單狀態
         Integer storeNo = cancelReq.getStore_no();
+
         String sql = " update DELIVERY_ORDERS set status = case status when 0 then 4 when 2 then 4 when 6 then 4 ELSE status end " +
                 " where order_no in (" + cancelReq.getOrder_uid() + ") ";
         Map<String, Object> map = new HashMap<String, Object>();
@@ -100,7 +103,7 @@ public class PxDaoImpl implements PxDao {
     public Integer insert_candel_order_return(CancelReq cancelReq) {
         clogger.debug("取消訂單 insert_candel_order_return");//取消訂單 退貨主檔 DELIVERY_ORDER_RETURN
         Integer storeNo = cancelReq.getStore_no();
-        String sql = "INSERT INTO DELIVERY_ORDER_RETURN (platform_no, order_no, RETURN_ORDER_NO, return_date, return_memo, RETURN_PRICE, LOGISTICS_TYPE, STATUS,status_date) "
+        String sql = "INSERT INTO DELIVERY_ORDER_RETURN (platform_no, order_no, RETURN_ORDER_NO, return_date, return_memo, RETURN_PRICE, LOGISTIC_TYPE, STATUS,status_date) "
                 + "VALUES (7, :order_uid, PX_RETURN_SEQ.nextval, TO_DATE(:order_ref_date, 'YYYY-MM-DD HH24:MI:SS'), :cancel_memo,:RETURN_PRICE, 0, 40, SYSDATE)";
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("order_uid", cancelReq.getOrder_uid());  // 設置 'order_uid' 參數的值
@@ -126,7 +129,7 @@ public class PxDaoImpl implements PxDao {
     public Integer insert_return_order_return(ReturnReq returnReq) {
         rlogger.debug("退貨 insert_return_order_return");//退貨 insert退貨主檔 DELIVERY_ORDER_RETURN
         Integer store_no = returnReq.getStore_no();
-        String sql = "INSERT INTO DELIVERY_ORDER_RETURN (platform_no, order_no, RETURN_ORDER_NO, return_date, return_memo, RETURN_PRICE, LOGISTICS_TYPE, STATUS,status_date) "
+        String sql = "INSERT INTO DELIVERY_ORDER_RETURN (platform_no, order_no, RETURN_ORDER_NO, return_date, return_memo, RETURN_PRICE, LOGISTIC_TYPE, STATUS,status_date) "
                 + "VALUES (7, :order_uid, PX_RETURN_SEQ.nextval, TO_DATE(:order_ref_date, 'YYYY-MM-DD HH24:MI:SS'), :cancel_memo , :return_price, 0, 40, SYSDATE)";
 //        String sql = "INSERT INTO DELIVERY_ORDER_RETURN (platform_no, order_no, RETURN_ORDER_NO, return_date, return_memo, RETURN_PRICE, LOGISTICS_TYPE, STATUS, status_date) "
 //                + "VALUES (7, ?, DELIVERY_ORDER_RETURN_SEQ.nextval, TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS'), ?, ?, 0, 40, SYSDATE)";
