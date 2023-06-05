@@ -31,4 +31,9 @@ public class ReturnReq {
     public void setData(ReturnReqData data) {
         this.data = data;
     }
+    @Override
+    public String toString() {
+        return "ReturnReq [order_uid=" + order_uid + ", store_no=" + store_no + ", order_status=" + order_status
+                + ", data=" + data + "]";
+    }
 }

@@ -18,5 +18,8 @@ public class CancelData{
     public void setOrder_refund_data(OrderRefundData order_refund_data) {
         this.order_refund_data = order_refund_data;
     }
-
+    @Override
+    public String toString() {
+        return "CancelData [order_cancel_data=" + order_cancel_data + ", order_refund_data=" + order_refund_data + "]";
+    }
 }

@@ -81,7 +81,6 @@ public class EcOrderController {
                         String response = ecOrderService.ti_order_process(storeNo, orderInfo.getOrders().getOrder_uid());
                         logger.info("run by: " + getName() + " response: " + response);
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                         logger.info("run by: " + getName() + " fail: " + e.getMessage());
                     }               

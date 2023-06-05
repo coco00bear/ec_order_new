@@ -196,10 +196,10 @@ public class PxDaoImpl implements PxDao {
             Map<String, Object> map = new HashMap<>();
             map.put("order_uid", returnReq.getOrder_uid());  // 設置 'order_uid' 參數的值
             //map.put("RETURN_ORDER_NO", Math.random() * 10000);
-            map.put("item_no", data.getProd_uid());
+            map.put("item_no", data.getItem_no());
             map.put("delivery_qty", data.getDelivery_qty());
             map.put("return_qty", data.getReturn_qty());
-            map.put("total_price", data.getOrder_df_price());
+            map.put("total_price", data.getTotal_price());
             Integer count = storeNamedParameterJdbcTemplate.get(String.format("%2d", store_no)).update(sql, map);
             rlogger.debug(map.toString());
             rlogger.debug("xxx insert_return_items" + " == orderNo ==" + returnReq.getOrder_uid() + " == count == " + count);

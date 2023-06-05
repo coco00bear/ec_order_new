@@ -32,4 +32,9 @@ public class OrderRefundData{
     public void setOrder_ref_remarks(String order_ref_remarks) {
         this.order_ref_remarks = order_ref_remarks;
     }
+    @Override
+    public String toString() {
+        return "OrderRefundData [order_ref_money=" + order_ref_money + ", order_ref_surcharge=" + order_ref_surcharge
+                + ", order_ref_date=" + order_ref_date + ", order_ref_remarks=" + order_ref_remarks + "]";
+    }
 }
