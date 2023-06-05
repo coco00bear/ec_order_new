@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration  scan="true" scanPeriod="60 seconds" debug="false">
+
+    <!--LoggerContext 名稱-->
+    <!--    contextName>logback</contextName-->
+
+    <!--用來設定變數-->
+    <!--    <property name="APP_NAME" value="ApplicationName"/>-->
+    <property name="LOG_DIR" value="/home/tomcat/log/ec_order/"/>
+    <!--設置 Log 輸出格式-->
+    <property name="PATTERN_FORMAT" value="%d [%thread] [%logger{15}] %-5level - %msg%n"/>
+
+    <!--輸出到 Console-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${PATTERN_FORMAT}</pattern>
+        </encoder>
+    </appender>
+
+    <!--輸出到檔案-->
+    <appender name="all" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/order/detail.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/order/detail.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN_FORMAT}</pattern>
+        </encoder>
+    </appender>
+    <appender name="order" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/order/logback.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/order/logback.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN_FORMAT}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="px" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/order/px/detail.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/order/px/detail.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN_FORMAT}</pattern>
+        </encoder>
+    </appender>
+
+    <!--px取消訂單-->
+    <appender name="cancel.info-log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/cancel/logback.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/PxService/logback.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>14</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN_FORMAT}</pattern>
+        </encoder>
+    </appender>
+    <appender name="cancel.detail-log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/cancel/detail.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/PxDao/detail.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>14</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN_FORMAT}</pattern>
+        </encoder>
+    </appender>
+    <!--px退貨-->
+    <appender name="return.info-log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/return/logback.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/return/logback.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>14</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN_FORMAT}</pattern>
+        </encoder>
+    </appender>
+    <appender name="return.detail-log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/return/detail.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/return/detail.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>14</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN_FORMAT}</pattern>
+        </encoder>
+    </appender>
+    
+
+    <root level="info">
+        <appender-ref ref="console" />
+        <appender-ref ref="all"/>
+    </root>
+
+    <logger name="all" level="debug" additivity="false">
+        <!-- <appender-ref ref="console" /> -->
+        <appender-ref ref="all"/>
+    </logger>
+    <logger name="all.order" level="info" additivity="true">
+        <appender-ref ref="console" />
+        <appender-ref ref="order"/>
+    </logger>
+
+    <logger name="px" level="info" additivity="false">
+        <appender-ref ref="console" />
+        <appender-ref ref="px" />
+    </logger>
+
+   <!-- order cancel -->
+     <logger name="cancel.info" level="info" additivity="true">
+        <appender-ref ref="cancel.info-log"/>
+    </logger>
+    <logger name="cancel.detail" level="debug" additivity="true">
+        <appender-ref ref="cancel.detail-log"/>
+    </logger>
+    <!-- order return -->
+    <logger name="return.info" level="info" additivity="true">
+        <appender-ref ref="return.info-log"/>
+    </logger>
+    <logger name="return.detail" level="debug" additivity="true">
+        <appender-ref ref="return.detail-log"/>
+    </logger>
+
+
+    <logger name="all" level="debug" additivity="false">
+        <!-- <appender-ref ref="console" /> -->
+        <appender-ref ref="all"/>
+    </logger>
+
+</configuration>
