@@ -125,7 +125,7 @@ public class PxDaoImpl implements PxDao {
 
     }
 
-
+    @Override
     public Integer insert_return_order_return(ReturnReq returnReq) {
         rlogger.debug("退貨 insert_return_order_return");//退貨 insert退貨主檔 DELIVERY_ORDER_RETURN
         Integer store_no = returnReq.getStore_no();
@@ -155,7 +155,7 @@ public class PxDaoImpl implements PxDao {
         }
 
     }
-
+    @Override
     public Integer insert_return_items_all(ReturnReq returnReq) {
         rlogger.debug("整單退貨 insert_return_items_all");//退貨明細整筆退的話 出貨=退貨 DELIVERY_ORDER_ITEMS.TOTAL_PRICE=delivery_order_return_items.total_prica
         Integer store_no = returnReq.getStore_no();
@@ -177,7 +177,7 @@ public class PxDaoImpl implements PxDao {
             return null;
         }
     }
-
+    @Override
     public Integer insert_return_items(ReturnReq returnReq) {
         rlogger.debug("部分退貨 insert_return_items");//退貨明細 DELIVERY_ORDER_RETURN_ITEMS 當部分退貨時須insert(status=45)
         /*  PLATFORM_NO	NUMBER(2) px:7
@@ -212,7 +212,7 @@ public class PxDaoImpl implements PxDao {
         }
         return 1;
     }
-
+    @Override
     public Integer check_return_items(ReturnReq returnReq) {
         rlogger.debug("確認是否重複退貨 check_return_items");
         Integer store_no = returnReq.getStore_no();
@@ -227,7 +227,7 @@ public class PxDaoImpl implements PxDao {
         }
 
     }
-
+    @Override
     public List<OrderReturnDfData> getReturnResData(ReturnReq returnReq) {//取得OrderReturnDfData 退貨明細有多個
         rlogger.debug("getReturnResData");
         Integer store_no = returnReq.getStore_no();
