@@ -32,4 +32,9 @@ public class OrderCancelData{
     public void setContact_tel(String contact_tel) {
         this.contact_tel = contact_tel;
     }
+    @Override
+    public String toString() {
+        return "OrderCancelData [cancel_reason=" + cancel_reason + ", cancel_memo=" + cancel_memo + ", contact_name="
+                + contact_name + ", contact_tel=" + contact_tel + "]";
+    }
 }
