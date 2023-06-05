@@ -21,7 +21,7 @@ public class PxController {
     private PxServiceImpl pxService;
     Logger logger = LoggerFactory.getLogger("controller");
 
-    @GetMapping("/test")//測試連線 123
+    @GetMapping("/test")//測試連線 
     public ResponseEntity<Object> test(@PathParam("test") String test) {
         System.out.println("????");
         System.out.println(test);
