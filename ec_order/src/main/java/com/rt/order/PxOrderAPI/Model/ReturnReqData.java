@@ -18,5 +18,10 @@ public class ReturnReqData {
     }
     public void setOrder_return_df_data(List<OrderReturnDfData> order_return_df_data) {
         this.order_return_df_data = order_return_df_data;
+    }
+    @Override
+    public String toString() {
+        return "ReturnReqData [order_return_data=" + order_return_data + ", order_return_df_data="
+                + order_return_df_data + "]";
     }    
 }

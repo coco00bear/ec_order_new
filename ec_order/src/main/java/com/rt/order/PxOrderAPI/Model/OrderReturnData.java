@@ -38,4 +38,10 @@ public class OrderReturnData {
     public void setContact_tel(String contact_tel) {
         this.contact_tel = contact_tel;
     }
+    @Override
+    public String toString() {
+        return "OrderReturnData [return_request_date=" + return_request_date + ", return_memo=" + return_memo
+                + ", order_ref_money=" + order_ref_money + ", contact_name=" + contact_name + ", contact_tel="
+                + contact_tel + "]";
+    }
 }
