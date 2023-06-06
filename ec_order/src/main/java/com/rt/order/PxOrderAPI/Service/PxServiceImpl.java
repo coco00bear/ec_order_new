@@ -52,10 +52,10 @@ public class PxServiceImpl implements PxService {
         } else if (check_status == 0 || check_status == 2 || check_status == 6 /*|| check_status == 4*/) {
 
             Integer check_insert_cancel = pxDao.insert_cancel_refund_data(cancelReq);//新增訂單退款單
-            Integer check_insert_return = pxDao.insert_candel_order_return(cancelReq);//新增退貨主檔
+          //  Integer check_insert_return = pxDao.insert_cancel_order_return(cancelReq);//取消訂單不用新增退貨主檔
             clogger.info("check_insert_cancel="+check_insert_cancel);
-            clogger.info("check_insert_return"+check_insert_return);
-            if (check_insert_cancel == 1 && check_insert_return == 1) {
+            //clogger.info("check_insert_return"+check_insert_return);
+            if (check_insert_cancel == 1) {
                 Integer check_update = pxDao.update_px_status(cancelReq);
                 if (check_update == 1) {
                     CancelResInfo cancelResInfo = new CancelResInfo();
