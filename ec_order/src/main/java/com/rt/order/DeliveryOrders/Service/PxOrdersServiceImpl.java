@@ -157,13 +157,16 @@ public class PxOrdersServiceImpl implements PxOrdersService {
         //     logger.info("[檢查不是TI商品] == store_no: " + storeNo + " ord: " + orderNo);
         // }
 
-        Integer upd_delivery_orders = pxOrdersDao.upd_delivery_orders(storeNo, orderNo);
-            if(upd_delivery_orders==1){
-                logger.info("[更新訂單狀態] == store_no: " + storeNo + " ord: " + orderNo);
-                sleep(3000);
-                Boolean a = pxOrdersDao.proc_packing(storeNo, orderNo);
-                logger.info("[proc_pk] == store_no: " + storeNo + " ord: " + orderNo + "a: " + a);                
-            }
+        Integer get_store_no = Integer.parseInt(storeNo);
+
+        // chk_order_is_ti
+        Integer chk_order_is_ti = pxOrdersDao.chk_order_is_ti(String.format("%02d", get_store_no), orderNo);
+        if (chk_order_is_ti == 1) {
+            logger.info("[檢查是TI商品] == store_no: " + String.format("%02d", get_store_no) + " ord: " + orderNo);
+            sleep(3000);
+        } else {
+            logger.info("[檢查不是TI商品] == store_no: " + String.format("%02d", get_store_no) + " ord: " + orderNo);
+        }
         return "1";
     }
 
