@@ -159,7 +159,7 @@ public class PxServiceImpl implements PxService {
                     return returnMessage;
                 }
             }else {
-                ReturnMessage returnMessage = new ReturnMessage(400, "欄位格式錯誤");
+                ReturnMessage returnMessage = new ReturnMessage(400, "查無訂單資訊");
                 rlogger.info(returnReq+","+returnMessage);
                 return returnMessage;
             }
