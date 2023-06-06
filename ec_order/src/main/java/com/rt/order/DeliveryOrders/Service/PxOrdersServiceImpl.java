@@ -108,9 +108,9 @@ public class PxOrdersServiceImpl implements PxOrdersService {
     public ReturnMessage insertDeliveryOrders(String storeNo, DeliveryOrders deliveryOrders,
             List<DeliveryOrderItems> deliveryOrderItems, DeliveryCustInfo deliveryCustInfo) {        
         ResponOrderInfo responOrderInfo = new ResponOrderInfo();  
-        if (pxOrdersDao.insertDeliveryOrders(storeNo, deliveryOrders) == 1) {
-            pxOrdersDao.insertDeliveryOrderItems(storeNo, deliveryOrderItems);
-            pxOrdersDao.insertDeliveryCustInfo(storeNo, deliveryCustInfo);
+        if (pxOrdersDao.insertDeliveryOrders(String.format("%02d", storeNo), deliveryOrders) == 1) {
+            pxOrdersDao.insertDeliveryOrderItems(String.format("%02d", storeNo), deliveryOrderItems);
+            pxOrdersDao.insertDeliveryCustInfo(String.format("%02d", storeNo), deliveryCustInfo);
             //訂單成立
             responOrderInfo.setAssign_store(Integer.parseInt(storeNo));
             responOrderInfo.setOrder_uid(deliveryOrders.getOrderNo());       
