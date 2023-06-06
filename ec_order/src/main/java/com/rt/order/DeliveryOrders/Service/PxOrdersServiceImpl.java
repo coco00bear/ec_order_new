@@ -118,7 +118,7 @@ public class PxOrdersServiceImpl implements PxOrdersService {
             return new ResponOrder(200, "success", responOrderInfo);
         }else {
             //取得訂單號碼
-            Integer get_order_no = pxOrdersDao.getOrdNo(storeNo, deliveryOrders.getIdNo());            
+            Integer get_order_no = pxOrdersDao.getOrdNo(String.format("%02d", get_store_no), deliveryOrders.getIdNo());            
             responOrderInfo.setOrder_uid(get_order_no);
             responOrderInfo.setAssign_store(Integer.parseInt(storeNo));
                         
