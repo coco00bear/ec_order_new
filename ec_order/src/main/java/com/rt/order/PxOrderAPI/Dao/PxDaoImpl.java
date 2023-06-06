@@ -40,7 +40,7 @@ public class PxDaoImpl implements PxDao {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("order_no", cancelReq.getOrder_uid());
 //        map.put("status", cancelReq.getStatus());
-        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%2d", cancelReq.getStore_no())).queryForObject(sql, map, Integer.class);
+        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", cancelReq.getStore_no())).queryForObject(sql, map, Integer.class);
 //        clogger.debug(map.toString());
         clogger.debug("xxx check_status" + " == orderNo ==" + cancelReq.getOrder_uid() + " == count == " + count);
         try {
@@ -61,7 +61,7 @@ public class PxDaoImpl implements PxDao {
         String sql = " update DELIVERY_ORDERS set status = case status when 0 then 4 when 2 then 4 when 6 then 4 ELSE status end " +
                 " where order_no in (" + cancelReq.getOrder_uid() + ") ";
         Map<String, Object> map = new HashMap<String, Object>();
-        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%2d", storeNo)).update(sql, map);
+        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", storeNo)).update(sql, map);
 
         try {
             //Integer count = namedParameterJdbcTemplate.update(sql, map);
@@ -88,7 +88,7 @@ public class PxDaoImpl implements PxDao {
             map.put("order_ref_surcharge", cancelReq.getData().getOrder_refund_data().getOrder_ref_surcharge());
             map.put("order_refund_date", cancelReq.getData().getOrder_refund_data().getOrder_ref_date());
         }
-        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%2d", storeNo)).update(sql, map);
+        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", storeNo)).update(sql, map);
         try {
             //Integer count = namedParameterJdbcTemplate.update(sql, map);
             clogger.debug("xxx insert_cancel_data" + " == orderNo ==" + cancelReq.getOrder_uid() + " == count == " + count);
@@ -113,7 +113,7 @@ public class PxDaoImpl implements PxDao {
 //        map.put("contact_name", cancelReq.getData().getOrder_cancel_data().getContact_name());
 //        map.put("contact_tel", cancelReq.getData().getOrder_cancel_data().getContact_tel());
 
-        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%2d", storeNo)).update(sql, map);
+        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", storeNo)).update(sql, map);
 
         try {
             //Integer count = namedParameterJdbcTemplate.update(sql, map);
@@ -143,7 +143,7 @@ public class PxDaoImpl implements PxDao {
         map.put("return_price", returnReq.getData().getOrder_return_data().getOrder_ref_money());
 //            map.put("RETURN_PRICE", returnReq.getData().getOrder_return_data().getContact_name());
 //            map.put("contact_tel", returnReq.getData().getOrder_return_data().getContact_tel());
-        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%2d", store_no)).update(sql, map);
+        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", store_no)).update(sql, map);
 
         rlogger.debug(String.valueOf(count));
         try {
@@ -165,7 +165,7 @@ public class PxDaoImpl implements PxDao {
                 "                WHERE DELIVERY_ORDER_ITEMS.order_no in (" + returnReq.getOrder_uid() + ")";
 
         Map<String, Object> map = new HashMap<String, Object>();
-        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%2d", store_no)).update(sql, map);
+        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", store_no)).update(sql, map);
         rlogger.debug("xxx insert_return_items_all" + " == orderNo ==" + returnReq.getOrder_uid() + " == count == " + count);
         //map.put("order_uid", returnReq.getOrder_uid());
         //map.put("RETURN_ORDER_NO", Math.random() * 10000);
@@ -200,7 +200,7 @@ public class PxDaoImpl implements PxDao {
             map.put("delivery_qty", data.getDelivery_qty());
             map.put("return_qty", data.getReturn_qty());
             map.put("total_price", data.getTotal_price());
-            Integer count = storeNamedParameterJdbcTemplate.get(String.format("%2d", store_no)).update(sql, map);
+            Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", store_no)).update(sql, map);
             rlogger.debug(map.toString());
             rlogger.debug("xxx insert_return_items" + " == orderNo ==" + returnReq.getOrder_uid() + " == count == " + count);
         }
@@ -218,7 +218,7 @@ public class PxDaoImpl implements PxDao {
         Integer store_no = returnReq.getStore_no();
         String sql = "SELECT COUNT(*) FROM DELIVERY_ORDER_RETURN_ITEMS WHERE order_no in (" + returnReq.getOrder_uid() + ")";
         Map<String, Object> map = new HashMap<String, Object>();
-        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%2d", store_no)).queryForObject(sql, map, Integer.class);
+        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", store_no)).queryForObject(sql, map, Integer.class);
         if (count > 0) {
             rlogger.debug(String.valueOf(count));
             return 1;
@@ -235,7 +235,7 @@ public class PxDaoImpl implements PxDao {
         String sql = "SELECT RETURN_ORDER_NO, item_no,DELIVERY_QTY,return_qty,total_price FROM DELIVERY_ORDER_RETURN_ITEMS WHERE order_no =:order_uid ";
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("order_uid", returnReq.getOrder_uid());
-        list = storeNamedParameterJdbcTemplate.get(String.format("%2d", store_no)).query(sql, map, new OrderReturnDfDataRowMapper());
+        list = storeNamedParameterJdbcTemplate.get(String.format("%02d", store_no)).query(sql, map, new OrderReturnDfDataRowMapper());
         rlogger.debug(list.toString());
         if (list.isEmpty()) {
             return null;
