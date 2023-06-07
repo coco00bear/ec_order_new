@@ -162,7 +162,7 @@ public class PxDaoImpl implements PxDao {
          */
         Integer store_no = returnReq.getStore_no();
         String sql = "INSERT INTO DELIVERY_ORDER_RETURN_ITEMS (platform_no, order_no, RETURN_ORDER_NO, item_no, delivery_qty, return_qty, total_price)" +
-                "VALUES (7, :order_uid, PX_RETURN_SEQ.nextval,:item_no, :delivery_qty , :return_qty, :total_price)";
+                "VALUES (7, :order_uid,  (SELECT RETURN_ORDER_NO FROM DELIVERY_ORDER_RETURN WHERE order_no in (" + returnReq.getOrder_uid() + ")),:item_no, :delivery_qty , :return_qty, :total_price)";
         List<OrderReturnDfData> dataList = returnReq.getData().getOrder_return_df_data();
         for (OrderReturnDfData data : dataList) {
             Map<String, Object> map = new HashMap<>();
