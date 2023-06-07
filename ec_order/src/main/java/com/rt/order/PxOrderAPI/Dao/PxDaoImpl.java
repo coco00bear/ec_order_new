@@ -162,7 +162,7 @@ public class PxDaoImpl implements PxDao {
          */
         Integer store_no = returnReq.getStore_no();
         String sql = "INSERT INTO DELIVERY_ORDER_RETURN_ITEMS (platform_no, order_no, RETURN_ORDER_NO, item_no, delivery_qty, return_qty, total_price)" +
-                "VALUES (7, :order_uid,  (SELECT RETURN_ORDER_NO FROM DELIVERY_ORDER_RETURN WHERE order_no in (" + returnReq.getOrder_uid() + ")),:item_no, :delivery_qty , :return_qty, :total_price)";
+                "VALUES (7, :order_uid,  (SELECT RETURN_ORDER_NO FROM DELIVERY_ORDER_RETURN WHERE order_no in (" + returnReq.getOrder_uid() + ") and return_price=:total_price),:item_no, :delivery_qty , :return_qty, :total_price)";
         List<OrderReturnDfData> dataList = returnReq.getData().getOrder_return_df_data();
         for (OrderReturnDfData data : dataList) {
             Map<String, Object> map = new HashMap<>();
@@ -188,11 +188,23 @@ public class PxDaoImpl implements PxDao {
     public Integer check_return_items(ReturnReq returnReq) {
         rlogger.debug("確認是否重複退貨 check_return_items");
         Integer store_no = returnReq.getStore_no();
-        String sql = "SELECT COUNT(*) FROM DELIVERY_ORDER_RETURN_ITEMS WHERE order_no in (" + returnReq.getOrder_uid() + ")";
-        Map<String, Object> map = new HashMap<String, Object>();
-        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", store_no)).queryForObject(sql, map, Integer.class);
-        if (count > 0) {
-            rlogger.debug(String.valueOf(count));
+        String sql = "SELECT COUNT(*) FROM DELIVERY_ORDER_RETURN_ITEMS WHERE order_no in (" + returnReq.getOrder_uid() + ")" +
+                " AND item_no = :item_no";
+
+        Integer totalCount = 0;
+        List<OrderReturnDfData> dataList = returnReq.getData().getOrder_return_df_data();
+        for (OrderReturnDfData data : dataList){
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("order_no", returnReq.getOrder_uid());
+            map.put("item_no", data.getItem_no());
+            Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", store_no)).queryForObject(sql, map, Integer.class);
+            totalCount += count;
+        }
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put("item_no", returnReq.getData().getOrder_return_df_data().get(0).getItem_no());
+//        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", store_no)).queryForObject(sql, map, Integer.class);
+        if (totalCount > 0) {
+            rlogger.debug(String.valueOf(totalCount));
             return 1;
         } else {
             return 0;
