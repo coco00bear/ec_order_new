@@ -188,27 +188,44 @@ public class PxDaoImpl implements PxDao {
     public Integer check_return_items(ReturnReq returnReq) {
         rlogger.debug("確認是否重複退貨 check_return_items");
         Integer store_no = returnReq.getStore_no();
-        String sql = "SELECT COUNT(*) FROM DELIVERY_ORDER_RETURN_ITEMS WHERE order_no in (" + returnReq.getOrder_uid() + ")" +
-                " AND item_no = :item_no";
-
-        Integer totalCount = 0;
-        List<OrderReturnDfData> dataList = returnReq.getData().getOrder_return_df_data();
-        for (OrderReturnDfData data : dataList){
+        if(returnReq.getOrder_status() == 45){
+            String sql = "SELECT COUNT(*) FROM DELIVERY_ORDER_RETURN_ITEMS WHERE order_no in (:order_no)" +
+                    " AND item_no = :item_no";
+            Integer totalCount = 0;
+            List<OrderReturnDfData> dataList = returnReq.getData().getOrder_return_df_data();
+            for (OrderReturnDfData data : dataList){
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("order_no", returnReq.getOrder_uid());
+                map.put("item_no", data.getItem_no());
+                Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", store_no)).queryForObject(sql, map, Integer.class);
+                totalCount += count;
+            }
+            if (totalCount > 0) {
+                rlogger.debug("部分退貨:" + totalCount);
+                return 1;
+            } else {
+                return 0;
+            }
+        }else{
+            String sql ="SELECT COUNT(*) FROM DELIVERY_ORDER_RETURN WHERE order_no in (:order_no)";
+            Integer totalCount = 0;
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("order_no", returnReq.getOrder_uid());
-            map.put("item_no", data.getItem_no());
             Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", store_no)).queryForObject(sql, map, Integer.class);
             totalCount += count;
+            if (totalCount > 0) {
+                rlogger.debug("全部退:" + totalCount);
+                return 1;
+            } else {
+                return 0;
+            }
         }
+
+
 //        Map<String, Object> map = new HashMap<String, Object>();
 //        map.put("item_no", returnReq.getData().getOrder_return_df_data().get(0).getItem_no());
 //        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", store_no)).queryForObject(sql, map, Integer.class);
-        if (totalCount > 0) {
-            rlogger.debug(String.valueOf(totalCount));
-            return 1;
-        } else {
-            return 0;
-        }
+
 
     }
     @Override
