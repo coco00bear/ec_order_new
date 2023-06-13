@@ -79,7 +79,7 @@ public class PxDaoImpl implements PxDao {
         Integer storeNo = cancelReq.getStore_no();
 
         String sql = "INSERT INTO DELIVERY_ORDER_REFUND_DATA (platform_no, order_no, refund_no, refund_price, refund_surcharge, status, cause, type, refund_date, create_date ) "
-                + "VALUES (7,  :order_uid, PX_REFUND_SEQ.nextval, :order_ref_money, :order_ref_surcharge, 2, 1, 3, TO_DATE(:order_refund_date, 'YYYY-MM-DD HH24:MI:SS'),SYSDATE)";
+                + "VALUES (7,  :order_uid, PX_REFUND_SEQ.nextval, :order_ref_money, :order_ref_surcharge, 0, 1, 3, TO_DATE(:order_refund_date, 'YYYY-MM-DD HH24:MI:SS'),SYSDATE)";
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("order_uid", cancelReq.getOrder_uid());  // 設置 'order_uid' 參數的值
         if (cancelReq.getData() != null) {
