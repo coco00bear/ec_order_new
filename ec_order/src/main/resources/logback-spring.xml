@@ -92,6 +92,28 @@
             <pattern>${PATTERN_FORMAT}</pattern>
         </encoder>
     </appender>
+
+    <!--px貨態-->
+    <appender name="pxship.info-log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/pxship/logback.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/pxship/logback.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN_FORMAT}</pattern>
+        </encoder>
+    </appender>
+    <appender name="pxship.detail-log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/pxship/detail.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/pxship/detail.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN_FORMAT}</pattern>
+        </encoder>
+    </appender>
     
 
     <root level="info">
@@ -126,6 +148,14 @@
     </logger>
     <logger name="return.detail" level="debug" additivity="true">
         <appender-ref ref="return.detail-log"/>
+    </logger>
+
+    <!-- shipInfo -->
+    <logger name="pxship.info" level="info" additivity="true">
+        <appender-ref ref="pxship.info-log"/>
+    </logger>
+    <logger name="pxship.detail" level="debug" additivity="true">
+        <appender-ref ref="pxship.detail-log"/>
     </logger>
 
 
