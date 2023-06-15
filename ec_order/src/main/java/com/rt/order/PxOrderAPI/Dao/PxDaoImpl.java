@@ -79,7 +79,7 @@ public class PxDaoImpl implements PxDao {
         Integer storeNo = cancelReq.getStore_no();
 
         String sql = "INSERT INTO DELIVERY_ORDER_REFUND_DATA (platform_no, order_no, refund_no, refund_price, refund_surcharge, status, cause, type, refund_date, create_date ) "
-                + "VALUES (7,  :order_uid, PX_REFUND_SEQ.nextval, :order_ref_money, :order_ref_surcharge, 2, 1, 3, TO_DATE(:order_refund_date, 'YYYY-MM-DD HH24:MI:SS'),SYSDATE)";
+                + "VALUES (7,  :order_uid, PX_REFUND_SEQ.nextval, :order_ref_money, :order_ref_surcharge, 0, 1, 3, TO_DATE(:order_refund_date, 'YYYY-MM-DD HH24:MI:SS'),SYSDATE)";
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("order_uid", cancelReq.getOrder_uid());  // 設置 'order_uid' 參數的值
         if (cancelReq.getData() != null) {
@@ -99,31 +99,6 @@ public class PxDaoImpl implements PxDao {
 
     }
 
-    @Override
-    public Integer insert_candel_order_return(CancelReq cancelReq) {
-        clogger.debug("取消訂單 insert_candel_order_return");//取消訂單 退貨主檔 DELIVERY_ORDER_RETURN
-        Integer storeNo = cancelReq.getStore_no();
-        String sql = "INSERT INTO DELIVERY_ORDER_RETURN (platform_no, order_no, RETURN_ORDER_NO, return_date, return_memo, RETURN_PRICE, LOGISTIC_TYPE, STATUS,status_date) "
-                + "VALUES (7, :order_uid, PX_RETURN_SEQ.nextval, TO_DATE(:order_ref_date, 'YYYY-MM-DD HH24:MI:SS'), :cancel_memo,:RETURN_PRICE, 0, 40, SYSDATE)";
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("order_uid", cancelReq.getOrder_uid());  // 設置 'order_uid' 參數的值
-        map.put("order_ref_date", cancelReq.getData().getOrder_refund_data().getOrder_ref_date());
-        map.put("cancel_memo", "攔單");
-        map.put("RETURN_PRICE",cancelReq.getData().getOrder_refund_data().getOrder_ref_money());
-//        map.put("contact_name", cancelReq.getData().getOrder_cancel_data().getContact_name());
-//        map.put("contact_tel", cancelReq.getData().getOrder_cancel_data().getContact_tel());
-
-        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", storeNo)).update(sql, map);
-
-        try {
-            //Integer count = namedParameterJdbcTemplate.update(sql, map);
-            clogger.debug("xxx insert_candel_order_return" + " == orderNo ==" + cancelReq.getOrder_uid() + " == count == " + count);
-            return count;
-        } catch (Exception e) {
-            return null;
-        }
-
-    }
 
     @Override
     public Integer insert_return_order_return(ReturnReq returnReq) {
@@ -131,9 +106,6 @@ public class PxDaoImpl implements PxDao {
         Integer store_no = returnReq.getStore_no();
         String sql = "INSERT INTO DELIVERY_ORDER_RETURN (platform_no, order_no, RETURN_ORDER_NO, return_date, return_memo, RETURN_PRICE, LOGISTIC_TYPE, STATUS,status_date) "
                 + "VALUES (7, :order_uid, PX_RETURN_SEQ.nextval, TO_DATE(:order_ref_date, 'YYYY-MM-DD HH24:MI:SS'), :cancel_memo , :return_price, 0, 40, SYSDATE)";
-//        String sql = "INSERT INTO DELIVERY_ORDER_RETURN (platform_no, order_no, RETURN_ORDER_NO, return_date, return_memo, RETURN_PRICE, LOGISTICS_TYPE, STATUS, status_date) "
-//                + "VALUES (7, ?, DELIVERY_ORDER_RETURN_SEQ.nextval, TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS'), ?, ?, 0, 40, SYSDATE)";
-
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("order_uid", returnReq.getOrder_uid());  // 設置 'order_uid' 參數的值
@@ -190,7 +162,7 @@ public class PxDaoImpl implements PxDao {
          */
         Integer store_no = returnReq.getStore_no();
         String sql = "INSERT INTO DELIVERY_ORDER_RETURN_ITEMS (platform_no, order_no, RETURN_ORDER_NO, item_no, delivery_qty, return_qty, total_price)" +
-                "VALUES (7, :order_uid, PX_RETURN_SEQ.nextval,:item_no, :delivery_qty , :return_qty, :total_price)";
+                "VALUES (7, :order_uid,  (SELECT RETURN_ORDER_NO FROM DELIVERY_ORDER_RETURN WHERE order_no in (" + returnReq.getOrder_uid() + ") and return_price=:total_price),:item_no, :delivery_qty , :return_qty, :total_price)";
         List<OrderReturnDfData> dataList = returnReq.getData().getOrder_return_df_data();
         for (OrderReturnDfData data : dataList) {
             Map<String, Object> map = new HashMap<>();
@@ -216,15 +188,44 @@ public class PxDaoImpl implements PxDao {
     public Integer check_return_items(ReturnReq returnReq) {
         rlogger.debug("確認是否重複退貨 check_return_items");
         Integer store_no = returnReq.getStore_no();
-        String sql = "SELECT COUNT(*) FROM DELIVERY_ORDER_RETURN_ITEMS WHERE order_no in (" + returnReq.getOrder_uid() + ")";
-        Map<String, Object> map = new HashMap<String, Object>();
-        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", store_no)).queryForObject(sql, map, Integer.class);
-        if (count > 0) {
-            rlogger.debug(String.valueOf(count));
-            return 1;
-        } else {
-            return 0;
+        if(returnReq.getOrder_status() == 45){
+            String sql = "SELECT COUNT(*) FROM DELIVERY_ORDER_RETURN_ITEMS WHERE order_no in (:order_no)" +
+                    " AND item_no = :item_no";
+            Integer totalCount = 0;
+            List<OrderReturnDfData> dataList = returnReq.getData().getOrder_return_df_data();
+            for (OrderReturnDfData data : dataList){
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("order_no", returnReq.getOrder_uid());
+                map.put("item_no", data.getItem_no());
+                Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", store_no)).queryForObject(sql, map, Integer.class);
+                totalCount += count;
+            }
+            if (totalCount > 0) {
+                rlogger.debug("部分退貨:" + totalCount);
+                return 1;
+            } else {
+                return 0;
+            }
+        }else{
+            String sql ="SELECT COUNT(*) FROM DELIVERY_ORDER_RETURN WHERE order_no in (:order_no)";
+            Integer totalCount = 0;
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("order_no", returnReq.getOrder_uid());
+            Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", store_no)).queryForObject(sql, map, Integer.class);
+            totalCount += count;
+            if (totalCount > 0) {
+                rlogger.debug("全部退:" + totalCount);
+                return 1;
+            } else {
+                return 0;
+            }
         }
+
+
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put("item_no", returnReq.getData().getOrder_return_df_data().get(0).getItem_no());
+//        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", store_no)).queryForObject(sql, map, Integer.class);
+
 
     }
     @Override
