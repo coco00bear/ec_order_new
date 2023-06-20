@@ -105,13 +105,13 @@ public class ShipInfoServiceImpl implements ShipInfoService {
                         }
                         break;
                     case "delivered":
-                        if (get_status == 1) {
+                        if (get_status == 7) {
                             info.setStatus(delivered);
                             info.setLogistic_name(list.get(i).getLogistic_name());
                             info.setTracking_number(list.get(i).getTracking_number());
                         } else {
                             shipInfoLog.info("[get_shipinfo_forward]: " + "delivered: "+ "更新px貨態為130狀態不為1");
-                            return new ReturnMessage(1001, "更新px貨態為130狀態不為1");
+                            return new ReturnMessage(1001, "更新px貨態為130狀態不為7");
                         }
                         break;
                     case "arrived":
