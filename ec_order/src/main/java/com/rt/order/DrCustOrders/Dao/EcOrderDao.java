@@ -55,4 +55,7 @@ public interface EcOrderDao {
     //call ec api update px cargo
     public Integer update_cargo_status(Integer storeNo, Integer orderNo);
 
+    //call ec api to 21
+    public Integer SetOrderStatus21(Integer OrderUid);
+
 }

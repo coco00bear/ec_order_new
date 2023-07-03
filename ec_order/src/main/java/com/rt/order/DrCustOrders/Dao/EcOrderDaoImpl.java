@@ -47,11 +47,17 @@ public class EcOrderDaoImpl implements EcOrderDao {
     private String packingUrl;
 
     //ec-api-path
-    @Value("${ec-api-path}")
-    private String ecUrl;
+    @Value("${ec.api.setorder.box}")
+    private String ecBoxUrl;
 
     @Value("${ec.url.update_cargo_status}")
     private String cargoUrl;
+
+    @Value("${ec.api.setorder.finish}")
+    private String ecSetOrderStatus21Url;
+
+    @Value("${ec.api.setorder.pick}")
+    private String ecSetOrderStatus19Url;
 
     Logger logger = LoggerFactory.getLogger("all.order");
 
@@ -626,8 +632,7 @@ public class EcOrderDaoImpl implements EcOrderDao {
     @Override
     public Integer api_SetOrderStatus19(Integer OrderUid) {
 
-        String url = "http://10.240.0.2/RTMart/index.php/rtmart_pda/TEST/RT_PDAPickup/SetOrderStatus19";
-        // String url = "http://10.240.0.2/RTMart/index.php/rtmart_pda/TEST/RT_PDAPickup/SetOrderStatus19?OrderUid=500580813";
+        String url = ecSetOrderStatus19Url;
 
         logger.info("[api_SetOrderStatus19] - url: "+ url);
 
@@ -677,7 +682,7 @@ public class EcOrderDaoImpl implements EcOrderDao {
 
         try {
             // System.out.println("ecOrderItems: " + mapper.writeValueAsString(map1));
-            String url = ecUrl;
+            String url = ecBoxUrl;
             logger.info("[api_box_v2] - url: "+ url);
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -807,9 +812,11 @@ public class EcOrderDaoImpl implements EcOrderDao {
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("order_uid", Integer.parseInt("500"+String.valueOf(orderNo)));
-        map.put("state", 22);
-        map.put("logistic_name", "pelican");
-        map.put("tracking_number", String.format("%03d",storeNo)+String.valueOf(orderNo));
+        map.put("state", 115);
+        map.put("logistic_name", "");
+        map.put("tracking_number", "");
+        // map.put("logistic_name", "pelican");
+        // map.put("tracking_number", String.format("%03d",storeNo)+String.valueOf(orderNo));
         map.put("status_change_date", dateFormat.format(date));
         
         ObjectMapper mapper = new ObjectMapper();
@@ -822,6 +829,38 @@ public class EcOrderDaoImpl implements EcOrderDao {
         } catch (JsonProcessingException e) {                        
             logger.info("update_cargo_status-error: " + e.getMessage().toString());
             return 0;
+        }        
+    }
+
+    @Override
+    public Integer SetOrderStatus21(Integer OrderUid) {
+        String url = ecSetOrderStatus21Url;
+        // String url = "http://10.240.0.2/RTMart/index.php/rtmart_pda/TEST/RT_PDAPickup/SetOrderStatus21";
+
+        logger.info("[api_SetOrderStatus21] - url: "+ url);
+
+        HttpHeaders headers = new HttpHeaders();        
+        headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        headers.add("Authorization",
+        "r2XuQe/v4kZqdcS1AdGCpE11hHKZM7/tx2XTq1KZyoo6VWxSTllYSjBSVU5RY205cVpXTjBNREF4");
+
+        MultiValueMap<String,String> params = new LinkedMultiValueMap<>();
+        params.add("OrderUid", "500" + String.valueOf(OrderUid));
+
+        HttpEntity<MultiValueMap<String,String>> entity = new HttpEntity<>(params, headers);
+
+        logger.info("[api_SetOrderStatus21] - entity: "+ entity.getHeaders() + " body: " + entity.getBody());
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<EcResponMessage> respoHttpEntity = restTemplate.postForEntity(url, entity, EcResponMessage.class);
+        
+        try {
+            logger.info("[api_SetOrderStatus21] - respoHttpEntity: "+ new ObjectMapper().writeValueAsString(respoHttpEntity.getBody()));
+            return respoHttpEntity.getBody().getStatus();
+        } catch (JsonProcessingException e) {            
+            e.printStackTrace();
+            logger.info("[api_SetOrderStatus21] - fail: "+ e.getMessage());
+            return 1;
         }        
     }
 }
