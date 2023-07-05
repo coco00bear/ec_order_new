@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
@@ -18,8 +19,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rt.order.DeliveryOrders.Model.DeliveryCustInfo;
 import com.rt.order.DeliveryOrders.Model.DeliveryOrderItems;
 import com.rt.order.DeliveryOrders.Model.DeliveryOrders;
-import com.rt.order.DrCustOrders.Model.EcResponMessage;
 import com.rt.order.configuration.connection.StoreIpConfiguraion;
+import com.rt.order.utility.model.ReturnMessage;
 
 @Repository
 public class PxOrdersDaoImpl implements PxOrdersDao {
@@ -27,6 +28,9 @@ public class PxOrdersDaoImpl implements PxOrdersDao {
     @Autowired
     @Qualifier("storeJDBC")
     private Map<String, NamedParameterJdbcTemplate> storeNamedParameterJdbcTemplate;
+
+    @Value("${rt-api.ec_order.domain.path}")
+    private String ShipinfoUrl;
 
     Logger logger = LoggerFactory.getLogger("px");
 
@@ -233,7 +237,7 @@ public class PxOrdersDaoImpl implements PxOrdersDao {
 
 
     @Override
-    public Integer upd_delivery_orders(String storeNo, Integer orderNo) {
+    public Integer upd_delivery_orders(String storeNo, Integer orderNo, Integer status) {
         String sql = " update delivery_orders set status = 5 " +
                 " where store_no = :store_no " +
                 "   and order_no = :ord_no  ";
@@ -262,12 +266,12 @@ public class PxOrdersDaoImpl implements PxOrdersDao {
 
 
     @Override
-    public Integer call_px_shipinfo(String storeNo, Integer orderNo, Integer status) {
+    public Integer call_px_shipinfo(Integer storeNo, Integer orderNo, String status) {
 
-        String url = "";
+        String url = ShipinfoUrl+"/ship_info_forward";
 
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("store_no", Integer.parseInt(storeNo));
+        map.put("store_no", storeNo);
         map.put("order_no", orderNo);
         map.put("status", status);
 
@@ -275,8 +279,9 @@ public class PxOrdersDaoImpl implements PxOrdersDao {
         try {
             logger.info("call_px_shipinfo-json: " + mapper.writeValueAsString(map));
             RestTemplate restTemplate = new RestTemplate();
-            EcResponMessage ecResponMessage = restTemplate.postForObject(url, mapper.writeValueAsString(map),EcResponMessage.class);
-            return 1;
+            ReturnMessage returnMessage= restTemplate.postForObject(url, mapper.writeValueAsString(map),ReturnMessage.class);
+            
+            return returnMessage.getStatusCode();
         }catch (JsonProcessingException e) {                        
             logger.info("call_px_shipinfo-error: " + e.getMessage().toString());
             return 0;
@@ -298,10 +303,12 @@ public class PxOrdersDaoImpl implements PxOrdersDao {
         if(result.contains("success")){
             response = 0;
             return true;
+        }else if(result.contains("is_packing")){
+            response = 1001;
         }else{
             response = 999;
         }
-        logger.info("[proc_packing] == ["+storeNo+"-"+orderNo+"]" + " response == " + response);
+        logger.info("[proc_packing] == ["+storeNo+"-"+orderNo+"]" + " response == " + response);        
 
         return false;
     }

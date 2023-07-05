@@ -23,10 +23,10 @@ public interface PxOrdersDao {
     //check orders is ti
     public Integer chk_order_is_ti(String storeNo, Integer orderNo);
 
-    public Integer upd_delivery_orders(String storeNo, Integer orderNo);
+    public Integer upd_delivery_orders(String storeNo, Integer orderNo, Integer status);
 
     //call px 100,110,120,130
-    public Integer call_px_shipinfo(String storeNo, Integer orderNo, Integer status);
+    public Integer call_px_shipinfo(Integer storeNo, Integer orderNo, String status);
 
     //packing
     public boolean proc_packing(String storeNo, Integer orderNo);

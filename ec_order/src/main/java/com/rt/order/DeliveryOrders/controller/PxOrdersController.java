@@ -66,7 +66,7 @@ public class PxOrdersController {
             Thread thread = new Thread("TI-CHECK") {
                 public void run() {
                     try {
-                        Thread.sleep(10000);
+                        Thread.sleep(5000);
                         String response = pxOrdersService.ti_order_process(deliveryOrders.getStoreNo()+"", deliveryOrders.getOrderNo());
                         logger.info("run by: " + getName() + " response: " + response);
                     } catch (InterruptedException e) {

@@ -38,6 +38,8 @@ public class ShipInfoServiceImpl implements ShipInfoService {
     private Integer delivered;
     @Value("${px.status.arrived}")
     private Integer arrived;
+    @Value("${px.status.call.user}")
+    private Integer call_user;
 
     // 退貨
     @Value("${px.status.return.process}")
@@ -79,6 +81,7 @@ public class ShipInfoServiceImpl implements ShipInfoService {
                 info.setOrder_uid(list.get(i).getOrder_no());
                 info.setProd_uid(list.get(i).getItem_no());
                 info.setReply_time(list.get(i).getReply_time());
+                info.setStore_no(forwardParam.getStore_no()); //增加店號欄位
 
                 switch (forwardParam.getStatus()) {
                     case "ready_to_pick":
@@ -104,24 +107,34 @@ public class ShipInfoServiceImpl implements ShipInfoService {
                             return new ReturnMessage(1001, "更新px貨態為110/120狀態不為5");
                         }
                         break;
+                    case "call_user":
+                        if (get_status == 1) {
+                            info.setLogistic_name("");
+                            info.setTracking_number("");
+                            info.setStatus(call_user);
+                        } else {
+                            shipInfoLog.info("[get_shipinfo_forward]: " + "call_user: " + "更新px貨態為115狀態不為1");
+                            return new ReturnMessage(1001, "更新px貨態為115狀態不為1");
+                        }
+                        break;
                     case "delivered":
                         if (get_status == 7) {
                             info.setStatus(delivered);
                             info.setLogistic_name(list.get(i).getLogistic_name());
                             info.setTracking_number(list.get(i).getTracking_number());
                         } else {
-                            shipInfoLog.info("[get_shipinfo_forward]: " + "delivered: "+ "更新px貨態為130狀態不為1");
+                            shipInfoLog.info("[get_shipinfo_forward]: " + "delivered: "+ "更新px貨態為130狀態不為7");
                             return new ReturnMessage(1001, "更新px貨態為130狀態不為7");
                         }
                         break;
                     case "arrived":
-                        if (get_status == 7) {
+                        if (get_status == 8) {
                             info.setStatus(arrived);
                             info.setLogistic_name(list.get(i).getLogistic_name());
                             info.setTracking_number(list.get(i).getTracking_number());
                         } else {
-                            shipInfoLog.info("[get_shipinfo_forward]: " + "arrived: "+ "更新px貨態為140狀態不為7");
-                            return new ReturnMessage(1001, "更新px貨態為140狀態不為7");
+                            shipInfoLog.info("[get_shipinfo_forward]: " + "arrived: "+ "更新px貨態為140狀態不為8");
+                            return new ReturnMessage(1001, "更新px貨態為140狀態不為8");
                         }
                         break;
                     default:
@@ -180,6 +193,7 @@ public class ShipInfoServiceImpl implements ShipInfoService {
                         info.setStatus(return_process);
                         info.setLogistic_name(list.get(i).getLogistic_name());
                         info.setTracking_number(list.get(i).getTracking_number());
+                        info.setStore_no(reverseParam.getStore_no()); //增加店號欄位
 
                         shipInfoResInfos.add(info);
                     }
@@ -203,6 +217,7 @@ public class ShipInfoServiceImpl implements ShipInfoService {
                         info.setStatus(return_finish);
                         info.setLogistic_name(list.get(i).getLogistic_name());
                         info.setTracking_number(list.get(i).getTracking_number());
+                        info.setStore_no(reverseParam.getStore_no()); //增加店號欄位
 
                         shipInfoResInfos.add(info);
                     }
