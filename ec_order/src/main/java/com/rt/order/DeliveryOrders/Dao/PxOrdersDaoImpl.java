@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
@@ -22,6 +23,7 @@ import com.rt.order.DeliveryOrders.Model.DeliveryOrders;
 import com.rt.order.configuration.connection.StoreIpConfiguraion;
 import com.rt.order.utility.model.ReturnMessage;
 
+@PropertySource(value = "classpath:config/host.properties")
 @Repository
 public class PxOrdersDaoImpl implements PxOrdersDao {
 

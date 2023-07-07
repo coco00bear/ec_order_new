@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import com.rt.order.DeliveryOrders.Dao.PxOrdersDao;
@@ -18,6 +19,8 @@ import com.rt.order.DeliveryOrders.Model.ResponOrder;
 import com.rt.order.DeliveryOrders.Model.ResponOrderInfo;
 import com.rt.order.utility.model.ReturnMessage;
 
+
+@PropertySource(value = "classpath:config/environment.properties")
 @Service
 public class PxOrdersServiceImpl implements PxOrdersService {
 
