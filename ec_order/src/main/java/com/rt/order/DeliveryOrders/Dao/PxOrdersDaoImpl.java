@@ -238,11 +238,12 @@ public class PxOrdersDaoImpl implements PxOrdersDao {
 
     @Override
     public Integer upd_delivery_orders(String storeNo, Integer orderNo, Integer status) {
-        String sql = " update delivery_orders set status = 5 " +
+        String sql = " update delivery_orders set status = :status " +
                 " where store_no = :store_no " +
                 "   and order_no = :ord_no  ";
 
         Map<String, Object> map = new HashMap<String, Object>();
+         map.put("status", status);
         map.put("store_no", storeNo);
         map.put("ord_no", orderNo);
 
