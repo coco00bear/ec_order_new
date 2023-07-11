@@ -199,7 +199,11 @@ public class ShipInfoServiceImpl implements ShipInfoService {
                     }
                    shipInfoRes.setShip_infos(shipInfoResInfos);
                    shipInfoLog.info("[get_shipinfo_return - json]: " + shipInfoRes.toString());
-                }else return new ReturnMessage(1001, "更新px貨態130狀態錯誤");
+                }else {
+                    shipInfoLog.info("[get_shipinfo_return]: " + "更新px貨態210狀態錯誤");
+                    return new ReturnMessage(1001, "更新px貨態210狀態錯誤");
+                }
+                
             }
         }else if(reverseParam.getStatus().equals("return_finish")){
             Integer get_refund_status = shipInfoDao.chk_refund_order(reverseParam.getStore_no(), reverseParam.getRefund_no());
@@ -223,7 +227,10 @@ public class ShipInfoServiceImpl implements ShipInfoService {
                     }
                    shipInfoRes.setShip_infos(shipInfoResInfos);
                    shipInfoLog.info("[get_shipinfo_return - json]: " + shipInfoRes.toString());
-                }else return new ReturnMessage(1001, "更新px貨態140狀態錯誤");
+                }else {
+                    shipInfoLog.info("[get_shipinfo_return]: " + "更新px貨態220狀態錯誤");
+                    return new ReturnMessage(1001, "更新px貨態220狀態錯誤");
+                }
             }
         }else{
             shipInfoLog.info("[get_shipinfo_return]: " + "更新px貨態狀態名稱錯誤");
