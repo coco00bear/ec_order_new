@@ -123,7 +123,7 @@ public class ShipInfoDaoImpl implements ShipInfoDao {
     @Override
     public List<OrderDetail> get_return_data(ReverseParam reverseParam) {
         String sql = " select a.order_no as order_no, b.item_no as item_no, 0 as type, to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') as reply, "
-                + " case when a.logistic_type = 1 then '嘉里大榮' else '宅配通' end as logistic_name , a.logistic_case_no as case_no "
+                + " case when a.logistic_no = 1 then '嘉里大榮' else '宅配通' end as logistic_name , a.logistic_case_no as case_no "
                 + "  from delivery_order_return a, delivery_order_return_items b "
                 + " where a.platform_no = b.platform_no "
                 + "   and a.order_no = b.order_no "
