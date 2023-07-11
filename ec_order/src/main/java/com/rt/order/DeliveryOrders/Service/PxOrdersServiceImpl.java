@@ -148,6 +148,10 @@ public class PxOrdersServiceImpl implements PxOrdersService {
         logger.info("1.chk_order_is_ti: " + chk_order_is_ti);
         if (chk_order_is_ti == 1) {
             logger.info("[檢查是TI商品] == store_no: " + String.format("%02d", get_store_no) + " ord: " + orderNo);
+            sleep(2000);
+            //塞顧客配送資訊
+            Integer cust_detail = pxOrdersDao.insert_cust_detail(get_store_no, orderNo);
+            logger.info("[塞顧客配送資訊] == store_no: " + String.format("%02d", get_store_no) + " ord: " + orderNo+ " response: "+ cust_detail);
             sleep(3000);
             // update delivery status            
             Integer upd_delivery_orders = pxOrdersDao.upd_delivery_orders(storeNo, orderNo, 6);
@@ -156,7 +160,7 @@ public class PxOrdersServiceImpl implements PxOrdersService {
                 logger.info("[更新訂單狀態為6成功] == store_no: " + storeNo + " ord: " + orderNo);
                 sleep(5000);
                 // call px shipinfo to 100
-                Integer pxShipRes = pxOrdersDao.call_px_shipinfo(get_store_no, orderNo, "read_to_pick");
+                Integer pxShipRes = pxOrdersDao.call_px_shipinfo(get_store_no, orderNo, "ready_to_pick");
                 logger.info("3.call_px_shipinfo=100: " + pxShipRes);
                 if (pxShipRes == 200) {
                     logger.info("[更新PX貨態100成功] == store_no: " + storeNo + " ord: " + orderNo);
@@ -179,7 +183,7 @@ public class PxOrdersServiceImpl implements PxOrdersService {
                                 logger.info("[結帳成功] == store_no: " + storeNo + " ord: " + orderNo);
                                 sleep(5000);
                                 // call px shipinfo to 100
-                                Integer call_user = pxOrdersDao.call_px_shipinfo(get_store_no, orderNo, "call_user");
+                                Integer call_user = pxOrdersDao.call_px_shipinfo(get_store_no, orderNo, "call_user");                        
                                 logger.info("7.call_px_shipinfo=115: " + call_user);
                                 if (call_user == 200) {
                                     logger.info("[更新PX貨態115成功] == store_no: " + storeNo + " ord: " + orderNo);
@@ -204,6 +208,81 @@ public class PxOrdersServiceImpl implements PxOrdersService {
         } else {
             logger.info("[檢查不是TI商品] == store_no: " + String.format("%02d", get_store_no) + " ord: " + orderNo);
         }
+
+
+        /* test
+        // chk_order_is_ti
+        Integer chk_order_is_ti = pxOrdersDao.chk_order_is_ti(String.format("%02d", get_store_no), orderNo);
+        logger.info("1.chk_order_is_ti: " + chk_order_is_ti);
+        if (chk_order_is_ti == 1) {
+            logger.info("[檢查是TI商品] == store_no: " + String.format("%02d", get_store_no) + " ord: " + orderNo);
+            sleep(2000);
+            //塞顧客配送資訊
+            Integer cust_detail = pxOrdersDao.insert_cust_detail(get_store_no, orderNo);
+            logger.info("[塞顧客配送資訊] == store_no: " + String.format("%02d", get_store_no) + " ord: " + orderNo+ " response: "+ cust_detail);
+            sleep(3000);
+            // update delivery status            
+            Integer upd_delivery_orders = pxOrdersDao.upd_delivery_orders(storeNo, orderNo, 6);
+            logger.info("2.upd_delivery_orders=6: " + upd_delivery_orders);
+            if (upd_delivery_orders == 1) {
+                logger.info("[更新訂單狀態為6成功] == store_no: " + storeNo + " ord: " + orderNo);
+                sleep(5000);
+                // call px shipinfo to 100
+                //Integer pxShipRes = pxOrdersDao.call_px_shipinfo(get_store_no, orderNo, "ready_to_pick");
+                pxOrdersDao.call_px_shipinfo(get_store_no, orderNo, "ready_to_pick");
+                Integer pxShipRes = 200;
+                logger.info("3.call_px_shipinfo=100: " + pxShipRes);
+                if (pxShipRes == 200) {
+                    logger.info("[更新PX貨態100成功] == store_no: " + storeNo + " ord: " + orderNo);
+                    sleep(5000);
+                    Integer upd_delivery_orders_5 = pxOrdersDao.upd_delivery_orders(storeNo, orderNo, 5);
+                    logger.info("4.upd_delivery_orders_5=5: " + upd_delivery_orders_5);
+                    if (upd_delivery_orders_5 == 1) {
+                        logger.info("[更新訂單狀態為5成功] == store_no: " + storeNo + " ord: " + orderNo);
+                        sleep(5000);
+                        // call px shipinfo to 100
+                        //Integer pick_finish = pxOrdersDao.call_px_shipinfo(get_store_no, orderNo, "pick_finish");
+                        pxOrdersDao.call_px_shipinfo(get_store_no, orderNo, "pick_finish");
+                        Integer pick_finish = 200;
+                        logger.info("5.call_px_shipinfo=110: " + pick_finish);
+                        if (pick_finish == 200) {
+                            logger.info("[更新PX貨態110成功] == store_no: " + storeNo + " ord: " + orderNo);
+                            sleep(5000);
+                            // call rts to packing
+                            Boolean result = pxOrdersDao.proc_packing(storeNo, orderNo);
+                            logger.info("6.proc_packing: " + result);
+                            if (result == true) {
+                                logger.info("[結帳成功] == store_no: " + storeNo + " ord: " + orderNo);
+                                sleep(5000);
+                                // call px shipinfo to 100
+                                // Integer call_user = pxOrdersDao.call_px_shipinfo(get_store_no, orderNo, "call_user");
+                                pxOrdersDao.call_px_shipinfo(get_store_no, orderNo, "call_user");
+                                Integer call_user = 200;
+                                logger.info("7.call_px_shipinfo=115: " + call_user);
+                                if (call_user == 200) {
+                                    logger.info("[更新PX貨態115成功] == store_no: " + storeNo + " ord: " + orderNo);
+                                } else
+                                    logger.info("[更新PX貨態115失敗] == store_no: " + storeNo + " ord: " + orderNo);
+                            } else
+                                logger.info("[結帳失敗] == store_no: " + storeNo + " ord: " + orderNo);
+                        } else
+                            logger.info("[更新PX貨態110失敗] == store_no: " + storeNo + " ord: " + orderNo);
+
+                    } else {
+                        logger.info("[更新訂單狀態為5失敗] == store_no: " + storeNo + " ord: " + orderNo);
+                    }
+
+                } else {
+                    logger.info("[更新PX貨態100失敗] == store_no: " + storeNo + " ord: " + orderNo);
+                }
+            } else {
+                logger.info("[更新訂單狀態為6失敗] == store_no: " + storeNo + " ord: " + orderNo);
+            }
+
+        } else {
+            logger.info("[檢查不是TI商品] == store_no: " + String.format("%02d", get_store_no) + " ord: " + orderNo);
+        }
+        */
 
         return "1";
     }

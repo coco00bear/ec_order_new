@@ -30,4 +30,7 @@ public interface PxOrdersDao {
 
     //packing
     public boolean proc_packing(String storeNo, Integer orderNo);
+
+    //ti project insert cust detail
+    public Integer insert_cust_detail(Integer storeNo, Integer orderNo);
 }

@@ -245,7 +245,7 @@ public class PxOrdersDaoImpl implements PxOrdersDao {
                 "   and order_no = :ord_no  ";
 
         Map<String, Object> map = new HashMap<String, Object>();
-         map.put("status", status);
+        map.put("status", status);
         map.put("store_no", storeNo);
         map.put("ord_no", orderNo);
 
@@ -332,5 +332,24 @@ public class PxOrdersDaoImpl implements PxOrdersDao {
         logger.info("[getOrdNo] == ["+storeNo+"-"+px_order_no+"]" + " order_no == " + get_order_no);        
 
         return get_order_no;
+    }
+
+
+    @Override
+    public Integer insert_cust_detail(Integer storeNo, Integer orderNo) {
+        String sql = " insert into delivery_order_cust_detail  " +
+                " (platform_no, order_no, logistic_case_no, logistic_type_dc, logistic_type, status) " +
+                "   values (7, :orderNo, :case_no, '宅配通', 0, 1)  ";
+
+        String case_no = String.format("%03d", storeNo)+String.format("%06d", orderNo);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("orderNo", orderNo);
+        map.put("case_no", case_no);        
+
+        Integer count = storeNamedParameterJdbcTemplate.get(String.format("%02d", storeNo)).update(sql, map);
+
+        logger.info("[insert_cust_detail] " + "main:" + count);
+
+        return count;
     }
 }
