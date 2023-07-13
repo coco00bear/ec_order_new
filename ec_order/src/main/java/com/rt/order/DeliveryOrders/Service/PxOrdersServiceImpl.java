@@ -54,6 +54,8 @@ public class PxOrdersServiceImpl implements PxOrdersService {
         deliveryOrders.setType(1); // 訂單類型 1.廠商送貨 2.RT送貨 3.內用 4.店取
         deliveryOrders.setStoreNo(storeNo);
         deliveryOrders.setDeliveryCarriage(pxOrderInfo.getLogistic_carriage());
+        deliveryOrders.setRecycle(pxOrderInfo.getData().getOrders_data().getRecycle()); //廢四機
+        deliveryOrders.setCollection_amount(pxOrderInfo.getData().getOrders_data().getCollection_amount()); //代收金額
 
         return deliveryOrders;
     }

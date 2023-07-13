@@ -30,7 +30,10 @@ public class Orders {
         "invoice_certificate": "",
         "mart_store_no": 39,
         "mart_client_no": 151920,
-        "pk_type": 3
+        "pk_type": 3,
+        "px_order_id":"RXxxxxxxxxxxxxxxx"
+        "recycle": "Y",
+        "collection_amount": 0
     }
  */
 
@@ -63,13 +66,9 @@ public class Orders {
     private Integer mart_client_no;
     private Integer pk_type;
     private String px_order_id;
+    private String recycle;
+    private Integer collection_amount;
     
-    public String getPx_order_id() {
-        return px_order_id;
-    }
-    public void setPx_order_id(String px_order_id) {
-        this.px_order_id = px_order_id;
-    }
     public Integer getStore_no() {
         return store_no;
     }
@@ -238,7 +237,37 @@ public class Orders {
     public void setPk_type(Integer pk_type) {
         this.pk_type = pk_type;
     }
-
-
-
+    public String getPx_order_id() {
+        return px_order_id;
+    }
+    public void setPx_order_id(String px_order_id) {
+        this.px_order_id = px_order_id;
+    }
+    public String getRecycle() {
+        return recycle;
+    }
+    public void setRecycle(String recycle) {
+        this.recycle = recycle;
+    }
+    public Integer getCollection_amount() {
+        return collection_amount;
+    }
+    public void setCollection_amount(Integer collection_amount) {
+        this.collection_amount = collection_amount;
+    }
+    @Override
+    public String toString() {
+        return "Orders [store_no=" + store_no + ", order_uid=" + order_uid + ", mem_uid=" + mem_uid + ", mem_name="
+                + mem_name + ", phone=" + phone + ", phone1=" + phone1 + ", mem_address=" + mem_address
+                + ", order_gender=" + order_gender + ", count=" + count + ", memo=" + memo + ", pick=" + pick
+                + ", order_date=" + order_date + ", update=" + update + ", order_status=" + order_status + ", num="
+                + num + ", delivery_type=" + delivery_type + ", uniform=" + uniform + ", pay_way=" + pay_way
+                + ", credit_no=" + credit_no + ", delivery_way=" + delivery_way + ", first6Num=" + first6Num
+                + ", last4Num=" + last4Num + ", invoice_electronic_device_code=" + invoice_electronic_device_code
+                + ", invoice_donatee=" + invoice_donatee + ", invoice_certificate=" + invoice_certificate
+                + ", mart_store_no=" + mart_store_no + ", mart_client_no=" + mart_client_no + ", pk_type=" + pk_type
+                + ", px_order_id=" + px_order_id + ", recycle=" + recycle + ", collection_amount=" + collection_amount
+                + "]";
+    }
+        
 }

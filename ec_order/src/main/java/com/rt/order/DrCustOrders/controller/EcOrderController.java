@@ -89,31 +89,7 @@ public class EcOrderController {
             thread.start();
             System.out.println(thread.getName());
         }
-
-        // if(orderInfo.getItems().size()==1){
-        //     String response = ecOrderService.ti_order_process(storeNo, orderInfo.getOrders().getOrder_uid());
-        //     switch (response) {
-        //         case "success":
-        //             return ResponseEntity.status(HttpStatus.OK).body(new ReturnMessage("200", "TI新增訂單完成"));
-        //         case "not_ti":
-        //             return ResponseEntity.status(HttpStatus.OK).body(new ReturnMessage("200", "新增訂單完成"));
-        //         case "update_rts_error":
-        //             return ResponseEntity.status(HttpStatus.OK).body(new ReturnMessage("200", "更新RTS訂單狀態失敗"));
-        //         case "update_ec_error_19":
-        //             return ResponseEntity.status(HttpStatus.OK).body(new ReturnMessage("400", "更新ec訂單失敗"));
-        //         case "update_ec_error_21":
-        //             return ResponseEntity.status(HttpStatus.OK).body(new ReturnMessage("400", "更新ec訂單失敗"));
-        //         case "4":
-        //             return ResponseEntity.status(HttpStatus.OK).body(new ReturnMessage("400", "狀態不為撿貨完成,無法結帳"));
-        //         case "8":
-        //             return ResponseEntity.status(HttpStatus.OK).body(new ReturnMessage("400", "已結帳完成"));
-        //         case "999":
-        //             return ResponseEntity.status(HttpStatus.OK).body(new ReturnMessage("400", "結帳異常"));
-        //         case "update_cargo_fail":
-        //             return ResponseEntity.status(HttpStatus.OK).body(new ReturnMessage("400", "更新px貨態失敗"));
-                                    
-        //     }
-        // }
+        
         return ResponseEntity.status(HttpStatus.OK).body(new ReturnMessage(200,"新增訂單完成"));
     }
 

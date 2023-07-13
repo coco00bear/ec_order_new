@@ -26,23 +26,11 @@ public class DeliveryOrders {
     
     private Integer deliveryCarriage;
 
-    public Integer getDeliveryCarriage() {
-        return deliveryCarriage;
-    }
-
-    public void setDeliveryCarriage(Integer deliveryCarriage) {
-        this.deliveryCarriage = deliveryCarriage;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
     private Integer type;
+
+    private String recycle;
+
+    private Integer collection_amount;
 
     public Integer getPlatformNo() {
         return platformNo;
@@ -124,6 +112,22 @@ public class DeliveryOrders {
         this.total = total;
     }
 
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public Integer getDeliveryCarriage() {
+        return deliveryCarriage;
+    }
+
+    public void setDeliveryCarriage(Integer deliveryCarriage) {
+        this.deliveryCarriage = deliveryCarriage;
+    }
+
     public Integer getType() {
         return type;
     }
@@ -132,14 +136,30 @@ public class DeliveryOrders {
         this.type = type;
     }
 
+    public String getRecycle() {
+        return recycle;
+    }
+
+    public void setRecycle(String recycle) {
+        this.recycle = recycle;
+    }
+
+    public Integer getCollection_amount() {
+        return collection_amount;
+    }
+
+    public void setCollection_amount(Integer collection_amount) {
+        this.collection_amount = collection_amount;
+    }
+
     @Override
     public String toString() {
         return "DeliveryOrders [platformNo=" + platformNo + ", orderNo=" + orderNo + ", idNo=" + idNo + ", displayNo="
                 + displayNo + ", storeNo=" + storeNo + ", extNo=" + extNo + ", status=" + status + ", eater=" + eater
                 + ", memo=" + memo + ", total=" + total + ", createTime=" + createTime + ", deliveryCarriage="
-                + deliveryCarriage + ", type=" + type + "]";
+                + deliveryCarriage + ", type=" + type + ", recycle=" + recycle + ", collection_amount="
+                + collection_amount + "]";
     }
-
     
 
 }

@@ -126,7 +126,9 @@ public class EcOrderDaoImpl implements EcOrderDao {
                 " inv_love, " +
                 " inv_cert, " +
                 " pk_type," +
-                " px_order_no" +
+                " px_order_no," +
+                " recycle," +
+                " collection_amount" +
                 " ) select " +
                 " 99, " +
                 " :order_no, " +
@@ -164,7 +166,9 @@ public class EcOrderDaoImpl implements EcOrderDao {
                 " :inv_love, " +
                 " :inv_cert, " +
                 " :pk_type, " +
-                " :px_order_no " +
+                " :px_order_no, " +
+                " :recycle, " +
+                " :collection_amount " +
                 " from dual " +
                 " where not exists ( " +
                 " select 'x'  " +
@@ -212,116 +216,11 @@ public class EcOrderDaoImpl implements EcOrderDao {
         map.put("inv_cert", drCustOrders.getInv_cert());
         map.put("pk_type", drCustOrders.getPk_type());
         map.put("px_order_no", drCustOrders.getPx_order_no());
+        map.put("recycle",drCustOrders.getRecycle());
+        map.put("collection_amount", drCustOrders.getCollection_amount());
 
         return storeNamedParameterJdbcTemplate.get(storeNo).update(sql, map);
     }
-
-    /* 
-    @Override
-    public Integer insertDrCustOrderItems(String storeNo, List<DrCustOrderItems> drCustOrderItemsList) {
-        String sql = "insert into dr_cust_order_items (" +
-                "road_no, " +
-                "order_no, " +
-                "line_no, " +
-                "item_no, " +
-                "vat_no, " +
-                "promotion_no, " +
-                "prom_level, " +
-                "qty, " +
-                "original_qty, " +
-                "amount, " +
-                "desc_amnt, " +
-                "status, " +
-                "action_type, " +
-                "action_no, " +
-                "module_code, " +
-                "module_rule_type, " +
-                "module_rule_value, " +
-                "disc_action_type, " +
-                "disc_action_no, " +
-                "disc_rule_type, " +
-                "disc_rule_value, " +
-                "const_cnt, " +
-                "const_amount, " +
-                "type, " +
-                "bonus_point, " +
-                "avg_price, " +
-                "item_memo " +
-                ") select " +
-                "99, " +
-                ":ord_no, " +
-                ":line_no, " +
-                ":item_no, " +
-                ":sell_vat, " +
-                ":promotion_no, " +
-                ":prom_level, " +
-                ":qty, " +
-                ":qty, " +
-                ":amount, " +
-                "0, " +
-                "0, " +
-                ":action_type, " +
-                ":action_no, " +
-                ":module_code, " +
-                ":module_rule_type, " +
-                ":module_rule_value, " +
-                ":disc_action_type, " +
-                ":disc_action_no, " +
-                ":disc_rule_type, " +
-                ":disc_rule_value, " +
-                ":const_cnt, " +
-                ":const_amount, " +
-                ":ec_item_type, " +
-                ":bonus_point, " +
-                ":avg_price, " +
-                ":item_memo  " +
-                " from dual where not exists ( select 'x' from dr_cust_order_items " +
-                " where road_no = 99 " +
-                "   and order_no = :ord_no and line_no = :line_no )";
-
-        List<Map<String, Object>> maplist = new ArrayList<Map<String, Object>>(drCustOrderItemsList.size());
-        Map<String, Object> map;
-        for (int i = 0; i < drCustOrderItemsList.size(); i++) {
-            map = new HashMap<String, Object>();
-            map.put("ord_no", drCustOrderItemsList.get(i).getOrder_no());
-            map.put("line_no", drCustOrderItemsList.get(i).getLine_no());
-            map.put("item_no", drCustOrderItemsList.get(i).getItem_no());
-            map.put("promotion_no", drCustOrderItemsList.get(i).getPromotion_no());
-            map.put("prom_level", drCustOrderItemsList.get(i).getProm_level());
-            map.put("qty", drCustOrderItemsList.get(i).getQty());
-            map.put("action_type", drCustOrderItemsList.get(i).getAction_type());
-            map.put("action_no", drCustOrderItemsList.get(i).getAction_no());
-            map.put("module_code", drCustOrderItemsList.get(i).getModule_code());
-            map.put("module_rule_type", drCustOrderItemsList.get(i).getModule_rule_type());
-            map.put("module_rule_value", drCustOrderItemsList.get(i).getModule_rule_value());
-            map.put("disc_action_type", drCustOrderItemsList.get(i).getDisc_action_type());
-            map.put("disc_action_no", drCustOrderItemsList.get(i).getDisc_action_no());
-            map.put("disc_rule_type", drCustOrderItemsList.get(i).getDisc_rule_type());
-            map.put("disc_rule_value", drCustOrderItemsList.get(i).getDisc_rule_value());
-            map.put("const_cnt", drCustOrderItemsList.get(i).getConst_cnt());
-            map.put("const_amount", drCustOrderItemsList.get(i).getConst_amount());
-            map.put("ec_item_type", drCustOrderItemsList.get(i).getType());
-            map.put("bonus_point", drCustOrderItemsList.get(i).getBonus_point());
-            map.put("avg_price", drCustOrderItemsList.get(i).getAvg_price());
-            map.put("item_memo", drCustOrderItemsList.get(i).getItem_memo());
-
-            GetItemInfo getItemInfo = get_untaxed_amount(storeNo, drCustOrderItemsList.get(i).getItem_no(),
-                    drCustOrderItemsList.get(i).getAmount());
-            map.put("sell_vat", getItemInfo.getVat_no());
-            map.put("amount", getItemInfo.getUntaxed_amount());
-
-            maplist.add(map);
-        }
-
-        int[] result = storeNamedParameterJdbcTemplate.get(storeNo).batchUpdate(sql,
-                maplist.toArray(new Map[maplist.size()]));
-
-        if (result.length > 0) {
-            return 1;
-        }
-        return 0;
-    }
-    */
 
     @Override
     public Integer insertDrCustOrderItems(String storeNo, DrCustOrderItems drCustOrderItemsList) {

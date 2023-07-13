@@ -12,7 +12,9 @@ public class orders_data {
     private Integer pay_money_ssl;
     private String order_date;
     private String order_remarks;
-
+    private String recycle;
+    private Integer collection_amount;
+    
     public String getPx_order_no() {
         return px_order_no;
     }
@@ -73,4 +75,25 @@ public class orders_data {
     public void setOrder_remarks(String order_remarks) {
         this.order_remarks = order_remarks;
     }
+    public String getRecycle() {
+        return recycle;
+    }
+    public void setRecycle(String recycle) {
+        this.recycle = recycle;
+    }
+    public Integer getCollection_amount() {
+        return collection_amount;
+    }
+    public void setCollection_amount(Integer collection_amount) {
+        this.collection_amount = collection_amount;
+    }
+    @Override
+    public String toString() {
+        return "orders_data [px_order_no=" + px_order_no + ", order_addressee=" + order_addressee + ", order_email="
+                + order_email + ", order_telcellphone=" + order_telcellphone + ", order_city=" + order_city
+                + ", order_zip=" + order_zip + ", order_address=" + order_address + ", pay_money_ssl=" + pay_money_ssl
+                + ", order_date=" + order_date + ", order_remarks=" + order_remarks + ", recycle=" + recycle
+                + ", collection_amount=" + collection_amount + "]";
+    }
+    
 }

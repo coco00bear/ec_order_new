@@ -62,8 +62,10 @@ public class PxOrdersDaoImpl implements PxOrdersDao {
                 "eater, " +
                 "total, " +
                 "create_time, " +
-                "delivery_carriage ) " +
-                "select " +
+                "delivery_carriage ," +
+                "recycle, " +
+                "collection_amount " +
+                " ) select " +
                 ":platformNo, " +
                 ":orderNo, " +
                 ":idNo, " +
@@ -75,7 +77,9 @@ public class PxOrdersDaoImpl implements PxOrdersDao {
                 ":eater, " +
                 ":total, " +
                 "to_date(:createTime,'yyyy-mm-dd hh24:mi:ss'), " +
-                ":delivery_carriage " +
+                ":delivery_carriage, " +
+                ":recycle, " +
+                ":collection_amount " +
                 "  from dual " +
                 " where not exists ( " +
                 "  select 'x' from delivery_orders " +
@@ -95,6 +99,8 @@ public class PxOrdersDaoImpl implements PxOrdersDao {
         map.put("total", deliveryOrders.getTotal());
         map.put("createTime", deliveryOrders.getCreateTime());
         map.put("delivery_carriage", deliveryOrders.getDeliveryCarriage());
+        map.put("recycle", deliveryOrders.getRecycle());
+        map.put("collection_amount", deliveryOrders.getCollection_amount());
 
         return storeNamedParameterJdbcTemplate.get(storeNo).update(sql, map);
     }

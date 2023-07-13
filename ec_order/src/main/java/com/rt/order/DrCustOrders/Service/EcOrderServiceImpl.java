@@ -68,6 +68,10 @@ public class EcOrderServiceImpl implements EcOrderService {
         drCustOrders.setPk_type(orderInfo.getOrders().getPk_type());
         drCustOrders.setPx_order_no(orderInfo.getOrders().getPx_order_id());
 
+        //20230713 ti project add two column
+        drCustOrders.setRecycle(orderInfo.getOrders().getRecycle());
+        drCustOrders.setCollection_amount(orderInfo.getOrders().getCollection_amount());
+
         return drCustOrders;
     }
 
@@ -272,13 +276,23 @@ public class EcOrderServiceImpl implements EcOrderService {
                         switch (printer_invoice) {
                             case 0:
                                 logger.info("[TI訂單結帳成功] == store_no: " + storeNo + " ord: " + orderNo);
-                                sleep(8000);
-                                // 更新px貨態到已出貨
-                                Integer statusCode = ecOrderDao.update_cargo_status(Integer.parseInt(storeNo), orderNo);
-                                if (statusCode == 200) {
+                                sleep(5000);
+                                // 更新訂單狀態為21
+                                Integer SetOrderStatus21 = ecOrderDao.SetOrderStatus21(orderNo);
+                                if (SetOrderStatus21 == 0) {
+                                    logger.info("[更新ec訂單狀態為21成功] == store_no: " + storeNo + " ord: " + orderNo);
                                     return "success";
+                                    // sleep(5000);
+                                    // // 更新px貨態到專人電聯
+                                    // Integer statusCode = ecOrderDao.update_cargo_status(Integer.parseInt(storeNo),orderNo);
+                                    // if (statusCode == 200) {
+                                    //     return "success";
+                                    // } else {
+                                    //     return "update_cargo_fail";
+                                    // }
                                 } else {
-                                    return "update_cargo_fail";
+                                    logger.info("[更新ec訂單狀態為21失敗] == store_no: " + storeNo + " ord: " + orderNo);
+                                    return "fail";
                                 }
                             case 4:
                                 logger.info("[TI訂單-狀態不為撿貨完成,無法結帳] == store_no: " + storeNo + " ord: " + orderNo);

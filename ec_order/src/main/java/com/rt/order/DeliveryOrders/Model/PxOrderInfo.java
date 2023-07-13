@@ -15,7 +15,9 @@ public class PxOrderInfo {
     //             "order_address": "板橋區三民路二段144號888樓",
     //             "pay_money_ssl": 24900,
     //             "order_date": "2023-04-24 16:33:32",
-    //             "order_remarks": "消費者備註:電梯(無)本人簽收"
+    //             "order_remarks": "消費者備註:電梯(無)本人簽收",
+    //             "recycle": "Y",
+    //             "collection_amount": 300
     //         },
     //         "order_items_data": [
     //             {
