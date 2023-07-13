@@ -88,7 +88,7 @@ public class ShipInfoServiceImpl implements ShipInfoService {
                         if (get_status == 6) {
                             info.setStatus(ready_to_pick);
                             info.setLogistic_name("");
-                            info.setTracking_number("");                            
+                            info.setTracking_number("");                                                        
                         } else {
                             shipInfoLog.info("[get_shipinfo_forward]: " + "ready_to_pick: "+ "更新px貨態為100狀態不為6");
                             return new ReturnMessage(1001, "更新px貨態為100狀態不為6");
@@ -109,9 +109,11 @@ public class ShipInfoServiceImpl implements ShipInfoService {
                         break;
                     case "call_user":
                         if (get_status == 1) {
+                            String get_contact_date = shipInfoDao.get_logistic_delivery_log(forwardParam.getStore_no(), forwardParam.getOrder_no());
                             info.setLogistic_name("");
                             info.setTracking_number("");
                             info.setStatus(call_user);
+                            info.setScheduled_assembly_time(get_contact_date);
                         } else {
                             shipInfoLog.info("[get_shipinfo_forward]: " + "call_user: " + "更新px貨態為115狀態不為1");
                             return new ReturnMessage(1001, "更新px貨態為115狀態不為1");

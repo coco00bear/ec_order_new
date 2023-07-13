@@ -171,5 +171,27 @@ public class ShipInfoDaoImpl implements ShipInfoDao {
             shipInfoLog.debug("[call_px_api - fail]: "+ e.getMessage());
             return returnMessage;
         }
+    }
+
+    @Override
+    public String get_logistic_delivery_log(Integer storeNo, Integer orderNo) {
+        shipInfoLog.debug("[get_logistic_delivery_log]: "+ " storeNo: " + storeNo + " orderNo: " + orderNo);
+        String sql = " select to_char(contact_date,'yyyy-mm-dd') as contact_date "
+                + " from logistic_delivery_log "
+                + " where platform_no = 7 "
+                + " and order_no = :orderNo "
+                + " and status = 115 "
+                + " and rownum = 1 "
+                + " order by create_date desc ";
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("orderNo", orderNo);
+        try{
+            String get_contact_date = storeNamedParameterJdbcTemplate.get(String.format("%02d",storeNo)).queryForObject(sql, map, String.class);
+            shipInfoLog.debug("[get_logistic_delivery_log - get_contact_date]: " + get_contact_date);
+            return get_contact_date;
+        }catch(Exception e){
+            shipInfoLog.debug("[get_logistic_delivery_log - fail]: " + e.getMessage());
+            return "null";
+        }        
     }   
 }

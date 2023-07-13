@@ -29,4 +29,8 @@ public interface ShipInfoDao {
     //call .83 px_addship
     public ReturnMessage call_px_api(ShipInfoRes shipInfoRes);
 
+    //ti get logistic_delivery_log.contact_date
+    public String get_logistic_delivery_log(Integer storeNo, Integer orderNo);
+
+
 }

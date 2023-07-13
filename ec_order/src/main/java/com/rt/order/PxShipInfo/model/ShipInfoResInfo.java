@@ -15,6 +15,8 @@ public class ShipInfoResInfo {
     private String logistic_name;
     private String tracking_number;
     private Integer store_no;
+    private String scheduled_assembly_time;
+    
     public Integer getOrder_uid() {
         return order_uid;
     }
@@ -57,12 +59,19 @@ public class ShipInfoResInfo {
     public void setStore_no(Integer store_no) {
         this.store_no = store_no;
     }
+    public String getScheduled_assembly_time() {
+        return scheduled_assembly_time;
+    }
+    public void setScheduled_assembly_time(String scheduled_assembly_time) {
+        this.scheduled_assembly_time = scheduled_assembly_time;
+    }
     @Override
     public String toString() {
         return "ShipInfoResInfo [order_uid=" + order_uid + ", prod_uid=" + prod_uid + ", status=" + status
                 + ", reply_time=" + reply_time + ", logistic_name=" + logistic_name + ", tracking_number="
-                + tracking_number + ", store_no=" + store_no + "]";
+                + tracking_number + ", store_no=" + store_no + ", scheduled_assembly_time=" + scheduled_assembly_time
+                + "]";
     }
-
+    
     
 }
