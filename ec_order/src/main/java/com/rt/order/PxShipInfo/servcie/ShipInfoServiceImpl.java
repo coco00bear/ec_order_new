@@ -88,7 +88,8 @@ public class ShipInfoServiceImpl implements ShipInfoService {
                         if (get_status == 6) {
                             info.setStatus(ready_to_pick);
                             info.setLogistic_name("");
-                            info.setTracking_number("");                                                        
+                            info.setTracking_number("");
+                            info.setScheduled_assembly_time("");                                                        
                         } else {
                             shipInfoLog.info("[get_shipinfo_forward]: " + "ready_to_pick: "+ "更新px貨態為100狀態不為6");
                             return new ReturnMessage(1001, "更新px貨態為100狀態不為6");
@@ -98,6 +99,7 @@ public class ShipInfoServiceImpl implements ShipInfoService {
                         if (get_status == 5) {
                             info.setLogistic_name("");
                             info.setTracking_number("");
+                            info.setScheduled_assembly_time("");
                             if (list.get(i).getType() == 1) {
                                 info.setStatus(pick_finish);
                             } else
@@ -124,6 +126,7 @@ public class ShipInfoServiceImpl implements ShipInfoService {
                             info.setStatus(delivered);
                             info.setLogistic_name(list.get(i).getLogistic_name());
                             info.setTracking_number(list.get(i).getTracking_number());
+                            info.setScheduled_assembly_time("");
                         } else {
                             shipInfoLog.info("[get_shipinfo_forward]: " + "delivered: "+ "更新px貨態為130狀態不為7");
                             return new ReturnMessage(1001, "更新px貨態為130狀態不為7");
@@ -134,6 +137,7 @@ public class ShipInfoServiceImpl implements ShipInfoService {
                             info.setStatus(arrived);
                             info.setLogistic_name(list.get(i).getLogistic_name());
                             info.setTracking_number(list.get(i).getTracking_number());
+                            info.setScheduled_assembly_time("");
                         } else {
                             shipInfoLog.info("[get_shipinfo_forward]: " + "arrived: "+ "更新px貨態為140狀態不為8");
                             return new ReturnMessage(1001, "更新px貨態為140狀態不為8");
